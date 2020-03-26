@@ -91,6 +91,7 @@ public class Controller {
 				break;
 
 			case 3:
+				modelo.desempenioLP();
 
 				break;
 

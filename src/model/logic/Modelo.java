@@ -52,18 +52,18 @@ public class Modelo {
 				JSONArray coordinates = (JSONArray) geometry.get("coordinates");
 				Comparendos comparendo = new Comparendos(String.valueOf(comp.get("type")), Integer.parseInt(String.valueOf(properties.get("OBJECTID"))), String.valueOf(properties.get("FECHA_HORA")), String.valueOf(properties.get("CLASE_VEHI")), String.valueOf(properties.get("TIPO_SERVI")), String.valueOf(properties.get("INFRACCION")), String.valueOf(properties.get("DES_INFRAC")), String.valueOf(properties.get("LOCALIDAD")), String.valueOf(geometry.get("type")), String.valueOf(coordinates));
 				String Key = comparendo.getFECHA_HORA()+comparendo.getCLASE_VEHI()+comparendo.getINFRACCION();
-				
+
 				if(hashSectoresLP.contains(Key))
 				{
 					Key = Key + "a";
 					hashSectoresLP.put(Key, comparendo);
 				}
-				
+
 				else 
 				{
 					hashSectoresLP.put(Key, comparendo);
 				}
-				
+
 				if(hashSectoresSC.get(Key) != (null))
 				{
 					hashSectoresSC.get(Key).append(comparendo);
@@ -74,7 +74,7 @@ public class Modelo {
 					hashSectoresSC.put(Key, new Array<Comparendos>());
 					hashSectoresSC.get(Key).append(comparendo);
 				}
-				
+
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -122,43 +122,116 @@ public class Modelo {
 	public int numeroRehashLP() {
 		return hashSectoresLP.numeroRehash();
 	}
-//	public int numeroRehashSC() {
-//		return hashSectoresSC.numeroRehash();
-//	}
 
 	public void buscarComparendoLP(String fecha, String clase, String infraccion) 
 	{
-//		Array<Comparendos> compa = new Array<Comparendos>();
 		String Key = fecha+clase+infraccion; 
 		Iterator<String> iter = hashSectoresLP.keys();
+
 		while(iter.hasNext())
 		{
 			String llave = iter.next();
 			if(Key.equals(llave)  || llave.equals(Key + "a"))
 			{
-//				compa.append(hashSectoresLP.get(Key));
-				System.out.println("OBJECTID: " + hashSectoresLP.get(llave).getOBJECTID() + "\nFECHA_HORA: " + hashSectoresLP.get(llave).getFECHA_HORA() + "\nTIPO_SERVI: " + hashSectoresLP.get(llave).getTIPO_SERVI() + "\n																						CLASE_VEHI: " + hashSectoresLP.get(llave).getCLASE_VEHI() + "\nINFRACCION: " + hashSectoresLP.get(llave).getINFRACCION());
+				System.out.println("OBJECTID: " + hashSectoresLP.get(llave).getOBJECTID() + "\nFECHA_HORA: " + hashSectoresLP.get(llave).getFECHA_HORA() + "\nTIPO_SERVI: " + hashSectoresLP.get(llave).getTIPO_SERVI() + "\n CLASE_VEHI: " + hashSectoresLP.get(llave).getCLASE_VEHI() + "\nINFRACCION: " + hashSectoresLP.get(llave).getINFRACCION());
 			}
 		}
-//		for (int i =0; i < compa.size(); i++)
-//		{
-//			System.out.println("OBJECTID: " + compa.get(i).getOBJECTID() + " FECHA_HORA " + compa.get(i).getFECHA_HORA()+ " TIPO_SERVI: "+ compa.get(i).getTIPO_SERVI()+ " CLASE_VEHI: "+compa.get(i).getCLASE_VEHI() + " INFRACCION: " + compa.get(i).getINFRACCION());
-//		}
 	}
 
 	public void buscarComparendoSC(String fecha, String clase, String infraccion) 
 	{
-		String Key = fecha+clase+infraccion;
-		Array<Comparendos> comparendos = new Array<Comparendos>();
- 
-		comparendos = hashSectoresSC.get(Key);
-		
-		for(int i =0; i<comparendos.size();i++)
+		String Key = fecha+clase+infraccion; 
+		Iterator<String> iter = hashSectoresSC.keys();
+
+		while(iter.hasNext())
 		{
-			System.out.println("OBJECTID: " +comparendos.get(i).getOBJECTID() + " FECHA_HORA " + comparendos.get(i).getFECHA_HORA()+ " TIPO_SERVI: "+ comparendos.get(i).getTIPO_SERVI()+ " CLASE_VEHI: "+comparendos.get(i).getCLASE_VEHI() + " INFRACCION: " + comparendos.get(i).getINFRACCION());	
+			String llave = iter.next();
+			if(Key.equals(llave)  || llave.equals(Key + "a"))
+			{
+				for(int i = 0; i < hashSectoresSC.get(Key).size(); i++) 
+				{
+					Comparendos comparendo = hashSectoresSC.get(Key).get(i);
+					System.out.println("OBJECTID: " + comparendo.getOBJECTID() + "\nFECHA_HORA: " + comparendo.getFECHA_HORA() + "\nTIPO_SERVI: " + comparendo.getTIPO_SERVI() + "\n CLASE_VEHI: " + comparendo.getCLASE_VEHI() + "\nINFRACCION: " + comparendo.getINFRACCION());
+				}
+			}
+		}
+	}
+
+	public void desempenioSC() 
+	{
+		int i =10000;
+		Integer nonKey = 2000;
+		ArrayList <String> validKey = new ArrayList();
+
+		Iterator<String> iter = hashSectoresSC.keys();
+		String primera = iter.next();
+
+		while(iter.hasNext())
+		{
+			String llave = iter.next();
+			validKey.add(llave);
+
+		}while(validKey.size()<8000) 
+		{
+			validKey.add(primera);
+		}
+
+		long tiempoI = System.nanoTime();
+		while(i>0) 
+		{
+			hashSectoresSC.get(nonKey.toString());
+			nonKey--;
+			for (int j = 0; j < validKey.size(); j++) 
+			{
+				hashSectoresSC.get(validKey.get(j));
+				i++;
+			}
+		}
+		long tiempoF = System.nanoTime();
+		double demora = (tiempoF - tiempoI)/ 1e6;
+
+		System.out.println("Tiempo de demora SC: "+ demora);
+	}
+
+	public void desempenioLP() 
+	{
+		int i =10000;
+		Integer nonKey = 2000;
+		ArrayList <String> validKey = new ArrayList();
+
+		Iterator<String> iter = hashSectoresLP.keys();
+		String primera = iter.next();
+
+		while(iter.hasNext())
+		{
+			String llave = iter.next();
+			validKey.add(llave);			
 
 		}
 		
+		while(validKey.size()<8000) 
+		{
+			validKey.add(primera);
+		}
+
+		long tiempoI = System.nanoTime();
+
+		while(i>0) 
+		{
+			System.out.println("entra");
+			hashSectoresLP.get(nonKey.toString());
+			nonKey--;
+
+			for (int j = 0; j < validKey.size(); j++) 
+			{
+				hashSectoresLP.get(validKey.get(j));
+				i++;
+			}
+		}
+		long tiempoF = System.nanoTime();
+		double demora = (tiempoF - tiempoI)/ 1e6;
+
+		System.out.println("Tiempo de demora LP: "+ demora);
 	}
 
 }
