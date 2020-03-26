@@ -70,6 +70,7 @@ public class Controller {
 				break;
 
 			case 1:
+				
 				System.out.println("--------- \nDar fecha: ");
 				n = lector.next();
 				System.out.println("--------- \nDar clase: ");
@@ -77,6 +78,7 @@ public class Controller {
 				System.out.println("--------- \nDar infraccion: ");
 				tipo = lector.next();
 				modelo.buscarComparendoLP(n, m, tipo);
+				
 				break;
 
 			case 2:
@@ -88,10 +90,15 @@ public class Controller {
 				System.out.println("--------- \nDar infraccion: ");
 				tipo = lector.next();
 				modelo.buscarComparendoSC(n, m, tipo);
+				
 				break;
 
 			case 3:
+				System.out.println("--------- \nDar Desenpennio Linear Probing: ");
 				modelo.desempenioLP();
+				
+				System.out.println("--------- \nDar Desenpennio Separate Chaining: ");
+				modelo.desempenioSC();
 
 				break;
 

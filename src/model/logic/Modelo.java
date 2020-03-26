@@ -29,9 +29,9 @@ public class Modelo {
 
 	int numeroElementos = 0;
 
-	int m = 20;
+	int m = 11000;
 
-	private SeparateChainingHashST<String, Array<Comparendos>> hashSectoresSC = new SeparateChainingHashST<String, Array<Comparendos>>(100);
+	private SeparateChainingHashST<String, Array<Comparendos>> hashSectoresSC = new SeparateChainingHashST<String, Array<Comparendos>>(m);
 
 	private LinearProbingHashST<String, Comparendos> hashSectoresLP = new LinearProbingHashST<String, Comparendos>(String.class, Comparendos.class, m);
 
@@ -95,28 +95,28 @@ public class Modelo {
 		System.out.println(hashSectoresSC.size());
 	}
 
-	public int tamanioInicialLP() {
-		return m;
+	public void tamanioInicialLP() {
+		System.out.println(m);
 	}
-	public int tamanioInicialSC() {
-		return m;
-	}
-
-	public int tamanioFinalLP() {
-		return m-hashSectoresLP.size();
-	}
-	public int tamanioFinalSC() {
-		return m-hashSectoresSC.size();
+	public void tamanioInicialSC() {
+		System.out.println(m);
 	}
 
-	public double factorCargaLP() 
+	public void tamanioFinalLP() {
+		System.out.println(m-hashSectoresLP.size());
+	}
+	public void tamanioFinalSC() {
+		System.out.println(m-hashSectoresSC.size());
+	}
+
+	public void factorCargaLP() 
 	{
-		return hashSectoresLP.size()/m;
+		System.out.println(hashSectoresLP.size()/m);
 	}
 
-	public double factorCargaSC() 
+	public void factorCargaSC() 
 	{
-		return hashSectoresSC.size()/m;
+		System.out.println(hashSectoresSC.size()/m);
 	}
 
 	public int numeroRehashLP() {
@@ -171,21 +171,25 @@ public class Modelo {
 			String llave = iter.next();
 			validKey.add(llave);
 
-		}while(validKey.size()<8000) 
+		}
+		while(validKey.size()<8000) 
 		{
 			validKey.add(primera);
 		}
-
+		while(validKey.size()<10000) {
+			validKey.add(nonKey.toString());
+			nonKey--;
+		}
 		long tiempoI = System.nanoTime();
+		
 		while(i>0) 
 		{
-			hashSectoresSC.get(nonKey.toString());
-			nonKey--;
 			for (int j = 0; j < validKey.size(); j++) 
 			{
 				hashSectoresSC.get(validKey.get(j));
-				i++;
+				i--;
 			}
+			i--;
 		}
 		long tiempoF = System.nanoTime();
 		double demora = (tiempoF - tiempoI)/ 1e6;
@@ -200,33 +204,36 @@ public class Modelo {
 		ArrayList <String> validKey = new ArrayList();
 
 		Iterator<String> iter = hashSectoresLP.keys();
+		Iterator<String> iterT = hashSectoresLP.keys();
+		
 		String primera = iter.next();
 
 		while(iter.hasNext())
 		{
 			String llave = iter.next();
-			validKey.add(llave);			
-
+			validKey.add(llave);
 		}
-		
 		while(validKey.size()<8000) 
 		{
 			validKey.add(primera);
 		}
-
+		
+		while(validKey.size()<10000) {
+			validKey.add(nonKey.toString());
+			nonKey--;
+		}
+		
+		
 		long tiempoI = System.nanoTime();
 
-		while(i>0) 
+		while(i>0)
 		{
-			System.out.println("entra");
-			hashSectoresLP.get(nonKey.toString());
-			nonKey--;
-
 			for (int j = 0; j < validKey.size(); j++) 
 			{
 				hashSectoresLP.get(validKey.get(j));
-				i++;
+				i--;
 			}
+			i--;
 		}
 		long tiempoF = System.nanoTime();
 		double demora = (tiempoF - tiempoI)/ 1e6;
