@@ -1,22 +1,18 @@
 package model.data_structures;
 
-
-import java.util.ArrayList;
-
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISeparateChainingHashST<K , V>
 {
-	private int n; // the number of key-value pairs in the symbol table
+	private int size; // the number of key-value pairs in the symbol table
 	private int m; // the number of size of separate chaining table
-	public Node<K, V>[] table; // array of linked-list symbol tables
-	
-	private int numero = 0;
-		
+	private Node<K, V>[] table; // array of linked-list symbol tables
+
+
+
 	@SuppressWarnings("hiding")
-	public class Node<K, V> 
+	private class Node<K, V> 
 	{
 		private K key;
 		private V value;
@@ -41,7 +37,7 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 	public SeparateChainingHashST(int capacity) 
 	{
 		this.m = capacity;
-		this.n = 0;
+		this.size = 0;
 		table = (Node<K, V>[]) new Node[capacity];
 		for (int i = 0; i < m; i++) {
 			table[i] = (Node<K, V>) new Node();
@@ -50,18 +46,18 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 
 	public int size() 
 	{
-		return n;
-	}
-	
-	public int numeroRehash() 
-	{
-		return numero;
+		return size;
 	}
 
+	public boolean contiene(K key) 
+	{
+		if (key == null) throw new IllegalArgumentException("argument to contains() is null");
+		return get(key) != null;
+	} 
 
 	public boolean isEmpty() 
 	{
-		return n == 0;
+		return size == 0;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -70,15 +66,11 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 		if (key == null)
 			throw new IllegalArgumentException("called get() with key is null.");
 		int i = hash(key);
-		
 		Node x = table[i];
 		while (x != null) 
 		{
-			if (key.equals(x.key)) {
-				while(x.next!=null) {
+			if (key.equals(x.key))
 				return (V) x.value;
-				}
-				}
 			x = x.next;
 		}
 		return null;
@@ -97,7 +89,7 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 		}
 
 		// double table size if average length of list >= 10
-		if (n >= 10 * m)
+		if (size >= 10 * m)
 			rehash(2 * m);
 		int i = hash(key);
 		Node x = table[i];
@@ -113,12 +105,15 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 			p = x;
 			x = x.next;
 		}
-		if (p == null) {
+		if (p == null) 
+		{
 			table[i] = new Node(key, value, null);
-			n++;
-		} else {
+			size++;
+		} 
+		else 
+		{
 			p.next = new Node(key, value, null);
-			n++;
+			size++;
 		}
 	}
 
@@ -131,7 +126,7 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 		if (get(key)== null)
 			return null;
 		int i = hash(key);
-		
+
 		Node x = table[i];
 		Node p = null;
 		V oldValue = null;
@@ -144,14 +139,14 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 				} else {
 					p.next = x.next;
 				}
-				n--;
+				size--;
 				break;
 			}
 			p = x;
 			x = x.next;
 		}
 
-		if (m >  5 && n <= 2 * m)
+		if (m >  5 && size <= 2 * m)
 			rehash(m / 2);
 		return oldValue;
 	}
@@ -160,7 +155,6 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 	public Iterator<K> keys() 
 	{
 		Array<K> list = new Array<K>();
-		
 		for (int i = 0; i < m; i++) 
 		{
 			Node<K, V> x = table[i];
@@ -171,9 +165,8 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 				x = x.next;
 			}
 		}
-		return (Iterator<K>) list;
+		return list.iterator();
 	}
-
 
 	private int hash(K key) 
 	{
@@ -194,10 +187,14 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 			}
 		}
 		this.m = temp.m;
-		this.n = temp.n;
+		this.size = temp.size;
 		this.table = temp.table;
-		numero ++;
 	}
 
+	public Node<K,V> darRaiz(int i)
+	{
+		return table[i];
+	}
 
 }
+

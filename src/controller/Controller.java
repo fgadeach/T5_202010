@@ -66,8 +66,21 @@ public class Controller {
 			int option = lector.nextInt();
 			switch(option){
 			case 0:
-
 				modelo.loadComparendos(ruta);
+				break;
+
+			case 1:
+				System.out.println("--------- \nDar fecha: ");
+				n = lector.next();
+				System.out.println("--------- \nDar clase: ");
+				m = lector.next();
+				System.out.println("--------- \nDar infraccion: ");
+				tipo = lector.next();
+				modelo.buscarComparendoLP(n, m, tipo);
+				break;
+
+			case 2:
+
 				System.out.println("--------- \nDar fecha: ");
 				n = lector.next();
 				System.out.println("--------- \nDar clase: ");
@@ -75,14 +88,6 @@ public class Controller {
 				System.out.println("--------- \nDar infraccion: ");
 				tipo = lector.next();
 				modelo.buscarComparendoSC(n, m, tipo);
-				break;
-
-			case 1:
-
-				break;
-
-			case 2:
-
 				break;
 
 			case 3:

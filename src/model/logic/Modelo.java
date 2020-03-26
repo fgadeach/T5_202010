@@ -31,7 +31,7 @@ public class Modelo {
 
 	int m = 20;
 
-	private SeparateChainingHashST<String, Comparendos> hashSectoresSC = new SeparateChainingHashST<String, Comparendos>(m);
+	private SeparateChainingHashST<String, Array<Comparendos>> hashSectoresSC = new SeparateChainingHashST<String, Array<Comparendos>>(100);
 
 	private LinearProbingHashST<String, Comparendos> hashSectoresLP = new LinearProbingHashST<String, Comparendos>(String.class, Comparendos.class, m);
 
@@ -52,9 +52,29 @@ public class Modelo {
 				JSONArray coordinates = (JSONArray) geometry.get("coordinates");
 				Comparendos comparendo = new Comparendos(String.valueOf(comp.get("type")), Integer.parseInt(String.valueOf(properties.get("OBJECTID"))), String.valueOf(properties.get("FECHA_HORA")), String.valueOf(properties.get("CLASE_VEHI")), String.valueOf(properties.get("TIPO_SERVI")), String.valueOf(properties.get("INFRACCION")), String.valueOf(properties.get("DES_INFRAC")), String.valueOf(properties.get("LOCALIDAD")), String.valueOf(geometry.get("type")), String.valueOf(coordinates));
 				String Key = comparendo.getFECHA_HORA()+comparendo.getCLASE_VEHI()+comparendo.getINFRACCION();
+				
+				if(hashSectoresLP.contains(Key))
+				{
+					Key = Key + "a";
+					hashSectoresLP.put(Key, comparendo);
+				}
+				
+				else 
+				{
+					hashSectoresLP.put(Key, comparendo);
+				}
+				
+				if(hashSectoresSC.get(Key) != (null))
+				{
+					hashSectoresSC.get(Key).append(comparendo);
+				}
 
-				hashSectoresLP.put(Key, comparendo);
-				hashSectoresSC.put(Key, comparendo);	
+				else
+				{
+					hashSectoresSC.put(Key, new Array<Comparendos>());
+					hashSectoresSC.get(Key).append(comparendo);
+				}
+				
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -102,24 +122,43 @@ public class Modelo {
 	public int numeroRehashLP() {
 		return hashSectoresLP.numeroRehash();
 	}
-	public int numeroRehashSC() {
-		return hashSectoresSC.numeroRehash();
-	}
+//	public int numeroRehashSC() {
+//		return hashSectoresSC.numeroRehash();
+//	}
 
 	public void buscarComparendoLP(String fecha, String clase, String infraccion) 
 	{
+//		Array<Comparendos> compa = new Array<Comparendos>();
 		String Key = fecha+clase+infraccion; 
-		System.out.println("OBJECTID: " +hashSectoresLP.get(Key).getOBJECTID() + " FECHA_HORA " + hashSectoresLP.get(Key).getFECHA_HORA()+ " TIPO_SERVI: "+ hashSectoresLP.get(Key).getTIPO_SERVI()+ " CLASE_VEHI: "+hashSectoresLP.get(Key).getCLASE_VEHI() + " INFRACCION: " + hashSectoresLP.get(Key).getINFRACCION());
+		Iterator<String> iter = hashSectoresLP.keys();
+		while(iter.hasNext())
+		{
+			String llave = iter.next();
+			if(Key.equals(llave)  || llave.equals(Key + "a"))
+			{
+//				compa.append(hashSectoresLP.get(Key));
+				System.out.println("OBJECTID: " + hashSectoresLP.get(llave).getOBJECTID() + "\nFECHA_HORA: " + hashSectoresLP.get(llave).getFECHA_HORA() + "\nTIPO_SERVI: " + hashSectoresLP.get(llave).getTIPO_SERVI() + "\n																						CLASE_VEHI: " + hashSectoresLP.get(llave).getCLASE_VEHI() + "\nINFRACCION: " + hashSectoresLP.get(llave).getINFRACCION());
+			}
+		}
+//		for (int i =0; i < compa.size(); i++)
+//		{
+//			System.out.println("OBJECTID: " + compa.get(i).getOBJECTID() + " FECHA_HORA " + compa.get(i).getFECHA_HORA()+ " TIPO_SERVI: "+ compa.get(i).getTIPO_SERVI()+ " CLASE_VEHI: "+compa.get(i).getCLASE_VEHI() + " INFRACCION: " + compa.get(i).getINFRACCION());
+//		}
 	}
 
 	public void buscarComparendoSC(String fecha, String clase, String infraccion) 
 	{
 		String Key = fecha+clase+infraccion;
+		Array<Comparendos> comparendos = new Array<Comparendos>();
+ 
+		comparendos = hashSectoresSC.get(Key);
 		
-		Comparendos comparendo = hashSectoresSC.get(Key);
-		
-		System.out.println("OBJECTID: " +comparendo.getOBJECTID() + " FECHA_HORA " + comparendo.getFECHA_HORA()+ " TIPO_SERVI: "+ comparendo.getTIPO_SERVI()+ " CLASE_VEHI: "+comparendo.getCLASE_VEHI() + " INFRACCION: " + comparendo.getINFRACCION());	
+		for(int i =0; i<comparendos.size();i++)
+		{
+			System.out.println("OBJECTID: " +comparendos.get(i).getOBJECTID() + " FECHA_HORA " + comparendos.get(i).getFECHA_HORA()+ " TIPO_SERVI: "+ comparendos.get(i).getTIPO_SERVI()+ " CLASE_VEHI: "+comparendos.get(i).getCLASE_VEHI() + " INFRACCION: " + comparendos.get(i).getINFRACCION());	
 
+		}
+		
 	}
 
 }
