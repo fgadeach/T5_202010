@@ -24,7 +24,7 @@ public class Controller {
 	/*
 	 * 
 	 */
-private LinearProbingHashST<String,Comparendos> listaComparendos;
+	private LinearProbingHashST<String,Comparendos> listaComparendos;
 
 	/* Instancia del Modelo*/
 	private Modelo modelo;
@@ -66,21 +66,33 @@ private LinearProbingHashST<String,Comparendos> listaComparendos;
 			int option = lector.nextInt();
 			switch(option){
 			case 0:
+
 				modelo.loadComparendos(ruta);
-				System.out.println("--------- \nDar Fecha : ");
+				System.out.println("--------- \nDar fecha: ");
 				n = lector.next();
-				System.out.println("--------- \nDar clase vehi: ");
-				tipo = lector.next();
-				System.out.println("--------- \nDar infraccion: ");
+				System.out.println("--------- \nDar clase: ");
 				m = lector.next();
-				
-				modelo.buscarComparendoSC(n, tipo, m);
-				
+				System.out.println("--------- \nDar infraccion: ");
+				tipo = lector.next();
+				modelo.buscarComparendoSC(n, m, tipo);
+				break;
+
+			case 1:
+
+				break;
+
+			case 2:
+
+				break;
+
+			case 3:
+
 				break;
 
 			default: 
 				System.out.println("--------- \n Opcion Invalida !! \n---------");
 				break;
+
 
 			}
 		}

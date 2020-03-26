@@ -2,6 +2,7 @@ package model.data_structures;
 
 
 import java.util.ArrayList;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -10,12 +11,12 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 {
 	private int n; // the number of key-value pairs in the symbol table
 	private int m; // the number of size of separate chaining table
-	private Node<K, V>[] table; // array of linked-list symbol tables
+	public Node<K, V>[] table; // array of linked-list symbol tables
 	
 	private int numero = 0;
 		
 	@SuppressWarnings("hiding")
-	private class Node<K, V> 
+	public class Node<K, V> 
 	{
 		private K key;
 		private V value;
@@ -69,11 +70,15 @@ public class SeparateChainingHashST<K extends Comparable<K>, V> implements ISepa
 		if (key == null)
 			throw new IllegalArgumentException("called get() with key is null.");
 		int i = hash(key);
+		
 		Node x = table[i];
 		while (x != null) 
 		{
-			if (key.equals(x.key))
+			if (key.equals(x.key)) {
+				while(x.next!=null) {
 				return (V) x.value;
+				}
+				}
 			x = x.next;
 		}
 		return null;

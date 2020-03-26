@@ -115,7 +115,11 @@ public class Modelo {
 	public void buscarComparendoSC(String fecha, String clase, String infraccion) 
 	{
 		String Key = fecha+clase+infraccion;
-		System.out.println("OBJECTID: " +hashSectoresLP.get(Key).getOBJECTID() + " FECHA_HORA " + hashSectoresLP.get(Key).getFECHA_HORA()+ " TIPO_SERVI: "+ hashSectoresLP.get(Key).getTIPO_SERVI()+ " CLASE_VEHI: "+hashSectoresLP.get(Key).getCLASE_VEHI() + " INFRACCION: " + hashSectoresLP.get(Key).getINFRACCION());
+		
+		Comparendos comparendo = hashSectoresSC.get(Key);
+		
+		System.out.println("OBJECTID: " +comparendo.getOBJECTID() + " FECHA_HORA " + comparendo.getFECHA_HORA()+ " TIPO_SERVI: "+ comparendo.getTIPO_SERVI()+ " CLASE_VEHI: "+comparendo.getCLASE_VEHI() + " INFRACCION: " + comparendo.getINFRACCION());	
+
 	}
 
 }

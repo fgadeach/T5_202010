@@ -16,8 +16,9 @@ public class View
 	public void printMenu()
 	{
 		System.out.println("0. Carga de datos.");
-		System.out.println("1. Mostrar N comparendos mas al norte (MaxCola).");
-		System.out.println("2. Mostrar N comparendos mas al norte (MaxHeap).");
+		System.out.println("1. Buscar en Linear Probing.");
+		System.out.println("2. Buscar en Separate Chaining.");
+		System.out.println("3. Prueba de desempeño.");
 	}
 
 	public void printMessage(String mensaje) {
